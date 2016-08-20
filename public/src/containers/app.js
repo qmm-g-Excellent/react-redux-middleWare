@@ -7,7 +7,7 @@ class App extends Component{
     render() {
         return (
             <div>
-                <AddTodo/>
+                <AddTodo />
               <TodoList />
                 <Footer />
             </div>
