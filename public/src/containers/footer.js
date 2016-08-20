@@ -9,7 +9,10 @@ class Footer extends Component {
         )
 
         return (
-            <div>   {text}</div>
+            <div>
+                {text}
+                <button onClick={this.props.onComRemove}>CLEAR COMPLETED</button>
+            </div>
         )
     }
 }
@@ -25,7 +28,8 @@ function mapDispatchToProps(dispatch) {
     return {
         onSetName: (name)=> {
             dispatch({type: "TOGGLEFILTER", name})
-        }
+        },
+        onComRemove:()=> {dispatch({type:"CLEARCOMPLETED"})}
     }
 }
 

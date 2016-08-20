@@ -1,4 +1,7 @@
 let id =0;
+function clearCompleted(todos) {
+    return todos.filter(todo=>!todo.isDone)
+}
 function reducer(state={todos:[],filterName:"ALL"},action){
     const index = state.todos
         .indexOf(state.todos.find(todo=>todo.id === action.id));
@@ -22,11 +25,13 @@ function reducer(state={todos:[],filterName:"ALL"},action){
                 filterName:state.filterName
             }
         case 'TOGGLEFILTER' :
-            console.log(action.name)
             return {
                 todos:[...state.todos],
                 filterName:action.name
             }
+        case 'CLEARCOMPLETED' :
+            console.log(action.type);
+            return {todos:clearCompleted(state.todos)}
 
     }
     return state;

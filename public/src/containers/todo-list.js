@@ -25,12 +25,13 @@ class TodoList extends Component{
 // const text = ["ALL", "ACTIVE", "COMPLETED"].map((filterName,index) =>
 
 function select(state) {
-    if(state.filterName === "ALL"){
-        return state.todos;
-    }else if(state.filterName === "ACTIVE") {
+
+    if(state.filterName === "ACTIVE") {
         return state.todos.filter((todo) => !todo.isDone)
-    }else {
+    }else if(state.filterName === 'COMPLETED'){
         return state.todos.filter((todo) => todo.isDone)
+    }else {
+        return state.todos;
     }
 }
 
