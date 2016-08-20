@@ -3,14 +3,16 @@ import {render} from 'react-dom';
 import {connect}  from "react-redux";
 
 class TodoList extends Component{
-    remove(index){
-        this.props.onRemove(index)
+    remove(id){
+        this.props.onRemove(id)
     }
 
     render(){
         const todosText = this.props.todos.map((todo ,index)=><div key={index}>
-            {todo.text}
-            <button onClick={this.remove.bind(this,index)}>X</button>
+            <input  checked={todo.isDone} type="checkbox"
+                    onClick={this.props.onToogle.bind(this,todo.id)}/>
+            {todo.isDone? <s>{todo.text}</s> : todo.text}
+            <button onClick={this.remove.bind(this,todo.id)}>X</button>
         </div>);
         return (
             <div>
@@ -19,15 +21,30 @@ class TodoList extends Component{
         )
     }
 }
+
+// const text = ["ALL", "ACTIVE", "COMPLETED"].map((filterName,index) =>
+
+function select(state) {
+    if(state.filterName === "ALL"){
+        return state.todos;
+    }else if(state.filterName === "ACTIVE") {
+        return state.todos.filter((todo) => !todo.isDone)
+    }else {
+        return state.todos.filter((todo) => todo.isDone)
+    }
+}
+
 function mapStateToProps(state){
+    console.log(select(state));
      return {
-         todos:state.todos
+         todos:select(state)
      }
 }
 
 function mapDispatchToProps(dispatch){
     return {
-        onRemove:(index)=>dispatch({type:"DELETE",index})
+        onRemove:(id)=>dispatch({type:"DELETE",id}),
+        onToogle:(id)=>dispatch({type:"TOOGLE",id})
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(TodoList);
