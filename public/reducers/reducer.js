@@ -19,11 +19,15 @@ function reducer(state = {todos: [], filterName: "All"}, action) {
             return {
                 todos: [...state.todos],
                 filterName: state.filterName
-            }
+            };
         case "FILTERNAME":
             return {
                 todos: [...state.todos],
                 filterName:action.name
+            };
+        case "CLEARCOMPLETED":
+            return {
+            todos:action.activeItems
             }
     }
     return state;

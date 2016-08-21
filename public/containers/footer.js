@@ -14,19 +14,25 @@ class Footer extends Component{
         );
         return <div>
             {btnText}
+            <button onClick={this.props.clearCompleted.bind(this,this.props.todos)}>Clear Completed</button>
         </div>
     }
 }
 
 function mapStateToProps(state){
     return {
-        btnName:state.filterName
+        btnName:state.filterName,
+        todos:state.todos
     }
 }
 
 function mapDispatchToProps(dispatch){
     return {
-        onSetBtnName:(name)=> dispatch({type:"FILTERNAME",name})
+        onSetBtnName:(name)=> dispatch({type:"FILTERNAME",name}),
+        clearCompleted:(todos)=>{
+            const activeItems = todos.filter(item=> item.isDone === false);
+            dispatch({type:"CLEARCOMPLETED",activeItems})
+        }
     }
 }
 

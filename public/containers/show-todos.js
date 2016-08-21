@@ -7,9 +7,9 @@ class ShowTodos extends Component {
         const showText = this.props.todos.map((todo, index)=> {
             return <div key={index}>
                 <input type="checkbox" checked={todo.isDone}
-                onClick={this.props.onToogle.bind(this,todo.id)}/>
+                       onClick={this.props.onToogle.bind(this, todo.id)}/>
                 {todo.isDone ? <s>{todo.text}</s> : todo.text}
-                <button onClick={this.props.onRemove.bind(this,todo.id)}>X</button>
+                <button onClick={this.props.onRemove.bind(this, todo.id)}>X</button>
             </div>
         });
         return (
@@ -20,30 +20,28 @@ class ShowTodos extends Component {
     }
 }
 
-function selectedShow(state){
-    if(state.filterName === "Active"){
+function selectedShow(state) {
+    if (state.filterName === "Active") {
         return state.todos.filter(item=>item.isDone === false);
-    }else if(state.filterName === "Completed"){
+    } else if (state.filterName === "Completed") {
         return state.todos.filter(item=>item.isDone === true)
-    }else{
+    } else {
         return state.todos;
     }
 }
 
-
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
-        todos:selectedShow(state)
+        todos: selectedShow(state)
     }
 }
-
 
 function mapDispatchToProps(dispatch) {
     return {
         onRemove: (id)=> dispatch({type: "DELETE", id}),
-        onToogle:(id)=> dispatch({type:"TOOGLE",id})
+        onToogle: (id)=> dispatch({type: "TOOGLE", id})
     }
 }
 
 export default connect(mapStateToProps,
-                       mapDispatchToProps)(ShowTodos);
+    mapDispatchToProps)(ShowTodos);

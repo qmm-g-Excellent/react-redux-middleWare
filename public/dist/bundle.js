@@ -22064,6 +22064,10 @@
 	                todos: [].concat(_toConsumableArray(state.todos)),
 	                filterName: action.name
 	            };
+	        case "CLEARCOMPLETED":
+	            return {
+	                todos: action.activeItems
+	            };
 	    }
 	    return state;
 	}
@@ -22311,7 +22315,12 @@
 	            return _react2.default.createElement(
 	                "div",
 	                null,
-	                btnText
+	                btnText,
+	                _react2.default.createElement(
+	                    "button",
+	                    { onClick: this.props.clearCompleted.bind(this, this.props.todos) },
+	                    "Clear Completed"
+	                )
 	            );
 	        }
 	    }]);
@@ -22321,7 +22330,8 @@
 	
 	function mapStateToProps(state) {
 	    return {
-	        btnName: state.filterName
+	        btnName: state.filterName,
+	        todos: state.todos
 	    };
 	}
 	
@@ -22329,6 +22339,12 @@
 	    return {
 	        onSetBtnName: function onSetBtnName(name) {
 	            return dispatch({ type: "FILTERNAME", name: name });
+	        },
+	        clearCompleted: function clearCompleted(todos) {
+	            var activeItems = todos.filter(function (item) {
+	                return item.isDone === false;
+	            });
+	            dispatch({ type: "CLEARCOMPLETED", activeItems: activeItems });
 	        }
 	    };
 	}
