@@ -73,6 +73,10 @@
 	
 	var _showTodos2 = _interopRequireDefault(_showTodos);
 	
+	var _footer = __webpack_require__(/*! ./containers/footer */ 185);
+	
+	var _footer2 = _interopRequireDefault(_footer);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -100,7 +104,8 @@
 	                "div",
 	                null,
 	                _react2.default.createElement(_addTodos2.default, null),
-	                _react2.default.createElement(_showTodos2.default, null)
+	                _react2.default.createElement(_showTodos2.default, null),
+	                _react2.default.createElement(_footer2.default, null)
 	            );
 	        }
 	    }]);
@@ -22030,21 +22035,34 @@
 	
 	var id = 0;
 	function reducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? { todos: [] } : arguments[0];
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? { todos: [], filterName: "All" } : arguments[0];
 	    var action = arguments[1];
 	
 	    var index = state.todos.indexOf(state.todos.find(function (todo) {
-	        return todo.id === id;
+	        return todo.id === action.id;
 	    }));
 	    switch (action.type) {
 	        case "ADD":
 	            return {
-	                todos: [].concat(_toConsumableArray(state.todos), [{ text: action.text, isDone: false, id: id++ }])
+	                todos: [].concat(_toConsumableArray(state.todos), [{ text: action.text, isDone: false, id: id++ }]),
+	                filterName: state.filterName
 	            };
 	        case "DELETE":
 	            state.todos.splice(index, 1);
 	            return {
-	                todos: [].concat(_toConsumableArray(state.todos))
+	                todos: [].concat(_toConsumableArray(state.todos)),
+	                filterName: state.filterName
+	            };
+	        case "TOOGLE":
+	            state.todos[index].isDone = !state.todos[index].isDone;
+	            return {
+	                todos: [].concat(_toConsumableArray(state.todos)),
+	                filterName: state.filterName
+	            };
+	        case "FILTERNAME":
+	            return {
+	                todos: [].concat(_toConsumableArray(state.todos)),
+	                filterName: action.name
 	            };
 	    }
 	    return state;
@@ -22177,7 +22195,13 @@
 	                return _react2.default.createElement(
 	                    "div",
 	                    { key: index },
-	                    todo.text,
+	                    _react2.default.createElement("input", { type: "checkbox", checked: todo.isDone,
+	                        onClick: _this2.props.onToogle.bind(_this2, todo.id) }),
+	                    todo.isDone ? _react2.default.createElement(
+	                        "s",
+	                        null,
+	                        todo.text
+	                    ) : todo.text,
 	                    _react2.default.createElement(
 	                        "button",
 	                        { onClick: _this2.props.onRemove.bind(_this2, todo.id) },
@@ -22196,10 +22220,23 @@
 	    return ShowTodos;
 	}(_react.Component);
 	
-	function mapStateToProps(state) {
+	function selectedShow(state) {
+	    if (state.filterName === "Active") {
+	        return state.todos.filter(function (item) {
+	            return item.isDone === false;
+	        });
+	    } else if (state.filterName === "Completed") {
+	        return state.todos.filter(function (item) {
+	            return item.isDone === true;
+	        });
+	    } else {
+	        return state.todos;
+	    }
+	}
 	
+	function mapStateToProps(state) {
 	    return {
-	        todos: state.todos
+	        todos: selectedShow(state)
 	    };
 	}
 	
@@ -22207,11 +22244,96 @@
 	    return {
 	        onRemove: function onRemove(id) {
 	            return dispatch({ type: "DELETE", id: id });
+	        },
+	        onToogle: function onToogle(id) {
+	            return dispatch({ type: "TOOGLE", id: id });
 	        }
 	    };
 	}
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ShowTodos);
+
+/***/ },
+/* 185 */
+/*!*************************************!*\
+  !*** ./public/containers/footer.js ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 158);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 173);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Footer = function (_Component) {
+	    _inherits(Footer, _Component);
+	
+	    function Footer() {
+	        _classCallCheck(this, Footer);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Footer).apply(this, arguments));
+	    }
+	
+	    _createClass(Footer, [{
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+	
+	            var btnText = ["All", "Active", "Completed"].map(function (item, index) {
+	                return _react2.default.createElement(
+	                    "a",
+	                    { key: index,
+	                        style: { "textDecoration": _this2.props.btnName === item ? "underline" : "" },
+	                        onClick: _this2.props.onSetBtnName.bind(_this2, item) },
+	                    item,
+	                    " "
+	                );
+	            });
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                btnText
+	            );
+	        }
+	    }]);
+	
+	    return Footer;
+	}(_react.Component);
+	
+	function mapStateToProps(state) {
+	    return {
+	        btnName: state.filterName
+	    };
+	}
+	
+	function mapDispatchToProps(dispatch) {
+	    return {
+	        onSetBtnName: function onSetBtnName(name) {
+	            return dispatch({ type: "FILTERNAME", name: name });
+	        }
+	    };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Footer);
 
 /***/ }
 /******/ ]);
