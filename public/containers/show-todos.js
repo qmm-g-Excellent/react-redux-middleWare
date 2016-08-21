@@ -1,13 +1,15 @@
-import React,{Component} from "react";
+import React, {Component} from "react";
 import {connect} from "react-redux";
 import {render} from "react-dom";
 
-class  ShowTodos  extends Component{
-    render(){
-        console.log(this.props.todos)
-        const showText= this.props.todos.map((todo,index)=> {
+class ShowTodos extends Component {
+    render() {
+        const showText = this.props.todos.map((todo, index)=> {
             return <div key={index}>
+                {/*<input type="checkbox" checked={todo.isDone}*/}
+                {/*onClick={this.props.onToogle.bind(this,todo.id)}/>*/}
                 {todo.text}
+                <button onClick={this.props.onRemove.bind(this,todo.id)}>X</button>
             </div>
         })
         return (
@@ -19,11 +21,18 @@ class  ShowTodos  extends Component{
 }
 
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
 
     return {
-        todos:state.todos
+        todos: state.todos
     }
 }
 
-export default connect(mapStateToProps)(ShowTodos);
+function mapDispatchToProps(dispatch) {
+    return {
+        onRemove: (id)=> dispatch({type: "DELETE", id})
+    }
+}
+
+export default connect(mapStateToProps,
+                       mapDispatchToProps)(ShowTodos);

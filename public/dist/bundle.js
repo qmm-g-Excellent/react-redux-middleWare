@@ -22033,10 +22033,18 @@
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? { todos: [] } : arguments[0];
 	    var action = arguments[1];
 	
+	    var index = state.todos.indexOf(state.todos.find(function (todo) {
+	        return todo.id === id;
+	    }));
 	    switch (action.type) {
 	        case "ADD":
 	            return {
 	                todos: [].concat(_toConsumableArray(state.todos), [{ text: action.text, isDone: false, id: id++ }])
+	            };
+	        case "DELETE":
+	            state.todos.splice(index, 1);
+	            return {
+	                todos: [].concat(_toConsumableArray(state.todos))
 	            };
 	    }
 	    return state;
@@ -22163,12 +22171,18 @@
 	    _createClass(ShowTodos, [{
 	        key: "render",
 	        value: function render() {
-	            console.log(this.props.todos);
+	            var _this2 = this;
+	
 	            var showText = this.props.todos.map(function (todo, index) {
 	                return _react2.default.createElement(
 	                    "div",
 	                    { key: index },
-	                    todo.text
+	                    todo.text,
+	                    _react2.default.createElement(
+	                        "button",
+	                        { onClick: _this2.props.onRemove.bind(_this2, todo.id) },
+	                        "X"
+	                    )
 	                );
 	            });
 	            return _react2.default.createElement(
@@ -22189,7 +22203,15 @@
 	    };
 	}
 	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ShowTodos);
+	function mapDispatchToProps(dispatch) {
+	    return {
+	        onRemove: function onRemove(id) {
+	            return dispatch({ type: "DELETE", id: id });
+	        }
+	    };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ShowTodos);
 
 /***/ }
 /******/ ]);
