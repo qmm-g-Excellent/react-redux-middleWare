@@ -69,6 +69,10 @@
 	
 	var _addTodos2 = _interopRequireDefault(_addTodos);
 	
+	var _showTodos = __webpack_require__(/*! ./containers/show-todos */ 184);
+	
+	var _showTodos2 = _interopRequireDefault(_showTodos);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -95,7 +99,8 @@
 	            return _react2.default.createElement(
 	                "div",
 	                null,
-	                _react2.default.createElement(_addTodos2.default, null)
+	                _react2.default.createElement(_addTodos2.default, null),
+	                _react2.default.createElement(_showTodos2.default, null)
 	            );
 	        }
 	    }]);
@@ -22018,13 +22023,23 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	function reducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? { todos: [{ a: 1 }] } : arguments[0];
-	  var action = arguments[1];
 	
-	  return state;
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	var id = 0;
+	function reducer() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? { todos: [] } : arguments[0];
+	    var action = arguments[1];
+	
+	    switch (action.type) {
+	        case "ADD":
+	            return {
+	                todos: [].concat(_toConsumableArray(state.todos), [{ text: action.text, isDone: false, id: id++ }])
+	            };
+	    }
+	    return state;
 	}
 	
 	exports.default = reducer;
@@ -22050,6 +22065,8 @@
 	
 	var _reactDom = __webpack_require__(/*! react-dom */ 158);
 	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 173);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22068,15 +22085,21 @@
 	    }
 	
 	    _createClass(Addtodos, [{
+	        key: "add",
+	        value: function add() {
+	            this.props.onAdd(this.refs.input.value);
+	            this.refs.input.value = '';
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	            return _react2.default.createElement(
 	                "div",
 	                null,
-	                _react2.default.createElement("input", { type: "text" }),
+	                _react2.default.createElement("input", { type: "text", ref: "input" }),
 	                _react2.default.createElement(
 	                    "button",
-	                    null,
+	                    { onClick: this.add.bind(this) },
 	                    "+"
 	                )
 	            );
@@ -22086,7 +22109,87 @@
 	    return Addtodos;
 	}(_react.Component);
 	
-	exports.default = Addtodos;
+	function mapDispatchToProps(dispatch) {
+	    return {
+	        onAdd: function onAdd(text) {
+	            dispatch({ type: "ADD", text: text });
+	        }
+	    };
+	}
+	exports.default = (0, _reactRedux.connect)(function () {
+	    return {};
+	}, mapDispatchToProps)(Addtodos);
+
+/***/ },
+/* 184 */
+/*!*****************************************!*\
+  !*** ./public/containers/show-todos.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 173);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 158);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ShowTodos = function (_Component) {
+	    _inherits(ShowTodos, _Component);
+	
+	    function ShowTodos() {
+	        _classCallCheck(this, ShowTodos);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ShowTodos).apply(this, arguments));
+	    }
+	
+	    _createClass(ShowTodos, [{
+	        key: "render",
+	        value: function render() {
+	            console.log(this.props.todos);
+	            var showText = this.props.todos.map(function (todo, index) {
+	                return _react2.default.createElement(
+	                    "div",
+	                    { key: index },
+	                    todo.text
+	                );
+	            });
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                showText
+	            );
+	        }
+	    }]);
+	
+	    return ShowTodos;
+	}(_react.Component);
+	
+	function mapStateToProps(state) {
+	
+	    return {
+	        todos: state.todos
+	    };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ShowTodos);
 
 /***/ }
 /******/ ]);
