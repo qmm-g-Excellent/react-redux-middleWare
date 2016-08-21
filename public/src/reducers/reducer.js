@@ -1,7 +1,7 @@
 let id =0;
-function clearCompleted(todos) {
-    return todos.filter(todo=>!todo.isDone)
-}
+// function clearCompleted(todos) {
+//     return todos.filter(todo=>!todo.isDone)
+// }
 function reducer(state={todos:[],filterName:"ALL"},action){
     const index = state.todos
         .indexOf(state.todos.find(todo=>todo.id === action.id));
@@ -30,7 +30,7 @@ function reducer(state={todos:[],filterName:"ALL"},action){
                 filterName:action.name
             };
         case 'CLEARCOMPLETED' :
-            return {todos:clearCompleted(state.todos)}
+            return {todos:action.active}
 
     }
     return state;
