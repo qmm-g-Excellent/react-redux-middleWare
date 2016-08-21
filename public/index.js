@@ -12,7 +12,6 @@ const store = createStore(reducer);
 
 class App extends React.Component{
     render(){
-        // console.log(this.props.todos);
         return <div>
             <Addtodos />
             <ShowTodos />
@@ -21,16 +20,8 @@ class App extends React.Component{
     }
 }
 
-{/*function mapStateToProps(state){*/}
-//     return {
-//         todos:"jjjj"
-//     }
-// }
-
-
 render(<Provider store={store}>
         <App />
     </Provider>
     , document.getElementById("container"));
 
- // connect(mapStateToProps)(App);

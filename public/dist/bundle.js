@@ -99,7 +99,6 @@
 	    _createClass(App, [{
 	        key: "render",
 	        value: function render() {
-	            // console.log(this.props.todos);
 	            return _react2.default.createElement(
 	                "div",
 	                null,
@@ -113,20 +112,11 @@
 	    return App;
 	}(_react2.default.Component);
 	
-	{} /*function mapStateToProps(state){*/
-	//     return {
-	//         todos:"jjjj"
-	//     }
-	// }
-	
-	
 	(0, _reactDom.render)(_react2.default.createElement(
 	    _reactRedux.Provider,
 	    { store: store },
 	    _react2.default.createElement(App, null)
 	), document.getElementById("container"));
-	
-	// connect(mapStateToProps)(App);
 
 /***/ },
 /* 1 */
